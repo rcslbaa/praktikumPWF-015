@@ -27,3 +27,7 @@ Database
 
 ERD
 <img width="958" height="406" alt="Screenshot 2026-03-14 203539" src="https://github.com/user-attachments/assets/73635597-9be8-467c-8f4a-6a0144ce3f53" />
+
+# PRAKTIKUM 4
+membuat Product Controller
+<img width="1920" height="1200" alt="Screenshot 2026-04-11 142626" src="https://github.com/user-attachments/assets/ff7db31b-f013-4437-b619-25d943ee6022" />
