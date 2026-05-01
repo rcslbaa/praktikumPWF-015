@@ -34,3 +34,15 @@ ERD
 # PRAKTIKUM 4
 membuat Product Controller
 <img width="1920" height="1200" alt="Screenshot 2026-04-11 142626" src="https://github.com/user-attachments/assets/ff7db31b-f013-4437-b619-25d943ee6022" />
+
+# UCP 1
+CRUD table category
+<img width="1920" height="1200" alt="Screenshot 2026-05-01 233235" src="https://github.com/user-attachments/assets/74e1a34c-19b9-476b-a1a1-e9c7397203b7" />
+<img width="1920" height="1200" alt="Screenshot 2026-05-01 233143" src="https://github.com/user-attachments/assets/8b31adb6-da2e-42f0-a343-81e0a72daaa9" />
+
+form add product
+<img width="1920" height="1200" alt="Screenshot 2026-05-01 233404" src="https://github.com/user-attachments/assets/beddc84d-5b6d-4b86-8860-95c9175954b6" />
+
+gate untuk merubah role
+<img width="1920" height="1200" alt="Screenshot 2026-05-01 233430" src="https://github.com/user-attachments/assets/3e91037f-bfd1-4503-a725-17cb4929c011" />
+<img width="1920" height="1200" alt="Screenshot 2026-05-01 233458" src="https://github.com/user-attachments/assets/c129de75-4b95-4265-820c-cf5fae8f0f12" />
