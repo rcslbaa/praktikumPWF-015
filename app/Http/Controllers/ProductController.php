@@ -4,48 +4,36 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
-use App\Http\Requests\UpdateProductRequest;
 
 class ProductController extends Controller
 {
-    use AuthorizesRequests; 
+    use AuthorizesRequests;
 
     public function index()
     {
-        $products = Product::with('user')->paginate(10);
+        $products = Product::with('user', 'category')->paginate(10);
         return view('product.index', compact('products'));
     }
 
     public function create()
     {
-        $this->authorize('manage-product'); 
-        
-        $users = User::all();
-        return view('product.create', compact('users'));
+        $this->authorize('manage-product');
+
+        $users      = User::all();
+        $categories = Category::all();
+        return view('product.create', compact('users', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'qty' => 'required|integer',
-            'price' => 'required|numeric',
-        ], [
-            'name.required' => 'Nama produk wajib diisi.',
-            'name.max' => 'Nama produk tidak boleh lebih dari 255 karakter.',
-
-            'qty.required' => 'Jumlah (kuantitas) produk wajib diisi.',
-            'qty.integer' => 'Jumlah produk harus berupa angka bulat (tidak boleh desimal).',
-
-            'price.required' => 'Harga produk wajib diisi.',
-            'price.numeric' => 'Harga produk harus berupa angka yang valid.',
-        ]);
-
+        $validated = $request->validated();
         $validated['user_id'] = Auth::id();
 
         try {
@@ -53,27 +41,23 @@ class ProductController extends Controller
 
             return redirect()
                 ->route('product.index')
-                ->with('success', 'Product created successfully.');
+                ->with('success', 'Produk berhasil ditambahkan.');
 
         } catch (QueryException $e) {
-            Log::error('Product store database error', [
-                'message' => $e->getMessage(),
-            ]);
+            Log::error('Product store database error', ['message' => $e->getMessage()]);
 
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Database error while creating product.');
+                ->with('error', 'Terjadi kesalahan database saat menyimpan produk.');
 
         } catch (\Throwable $e) {
-            Log::error('Product store unexpected error', [
-                'message' => $e->getMessage(),
-            ]);
+            Log::error('Product store unexpected error', ['message' => $e->getMessage()]);
 
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'An unexpected error occurred.');
+                ->with('error', 'Terjadi kesalahan yang tidak terduga.');
         }
     }
 
@@ -86,35 +70,19 @@ class ProductController extends Controller
     {
         $this->authorize('update', $product);
 
-        $users = User::all();
-        return view('product.edit', compact('product', 'users'));
+        $users      = User::all();
+        $categories = Category::all();
+        return view('product.edit', compact('product', 'users', 'categories'));
     }
 
-    public function update(UpdateProductRequest $request, Product $product) 
+    public function update(UpdateProductRequest $request, Product $product)
     {
-        // Otorisasi: Mengecek apakah user boleh mengedit produk ini
         $this->authorize('update', $product);
 
-        // Mengambil data yang sudah lolos validasi dari UpdateProductRequest
         $validated = $request->validated();
+        $product->update($validated);
 
-        try {
-            // Proses simpan perubahan ke database
-            $product->update($validated);
-
-            return redirect()
-                ->route('product.index')
-                ->with('success', 'Product updated successfully.');
-
-        } catch (\Throwable $e) {
-            // Mencatat error jika terjadi kegagalan sistem
-            Log::error('Product update error', ['message' => $e->getMessage()]);
-
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Something went wrong during update.');
-        }
+        return redirect()->route('product.index')->with('success', 'Produk berhasil diperbarui.');
     }
 
     public function delete(Product $product)

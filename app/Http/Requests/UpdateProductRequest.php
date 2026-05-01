@@ -17,9 +17,10 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'category_id' => 'nullable|exists:categories,id',
+            'user_id' => 'required|exists:users,id',
             'qty' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
-            // Hapus atau beri 'nullable' untuk user_id jika tidak dikirim lewat form
         ];
     }
 

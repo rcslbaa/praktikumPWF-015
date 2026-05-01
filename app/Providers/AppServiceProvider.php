@@ -8,20 +8,17 @@ use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
+        // Gate untuk Product — hanya admin
         Gate::define('manage-product', function (User $user) {
+            return $user->role === 'admin';
+        });
+
+        // Gate untuk Category — hanya admin
+        Gate::define('manage-category', function (User $user) {
             return $user->role === 'admin';
         });
     }
